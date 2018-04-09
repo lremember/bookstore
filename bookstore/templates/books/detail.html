@@ -109,22 +109,22 @@ $(function () {
 					<a href="javascript:;" class="minus fr">-</a>
 				</div>
 			</div>
-			<div class="total">总价：<em>100元</em></div>
-			<div class="operate_btn">
+
+			 <div class="operate_btn">
                 {% csrf_token %}
-				<a href="javascript:;" class="buy_btn">立即购买</a>
-				<a href="javascript:;" books_id="{{ books.id }}" class="add_cart" id="add_cart">加入购物车</a>
-				<a href="#" id="write-comment" class="comment">我要写评论</a>
-			</div>
-			<div style="display:flex;" id="comment-input" data-bookid="{{ books.id }}" data-userid="{{ request.session.passport_id }}">
-			  <div>
-			    <input type="text" placeholder="评论内容">
-			  </div>
-			  <div id="submit-comment">
-			    <button>
-			      提交评论
-			    </button>
-			  </div>
+                <a href="javascript:;" class="buy_btn">立即购买</a>
+                <a href="javascript:;" books_id="{{ books.id }}" class="add_cart" id="add_cart">加入购物车</a>
+                <a href="{% url 'comment:comment' books_id=books.id%}" id="write-comment" class="comment">我要写评论</a>
+            </div>
+            <div style="display:flex;" id="comment-input" data-bookid="{{ books.id }}" data-userid="{{ request.session.passport_id }}">
+              <div>
+                <input type="text" placeholder="评论内容">
+              </div>
+              <div id="submit-comment">
+                <button>
+                  提交评论
+                </button>
+              </div>
 			</div>
 		</div>
 	</div>
@@ -280,4 +280,5 @@ $(function () {
 	text-align: center;
 }
 </style>
+
 {% endblock bottomfiles %}

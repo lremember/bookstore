@@ -227,33 +227,33 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-    <form method="post" action="/order/place/">
+  <form method="post" action="/order/place/">
     {% for book in books_li %}
-	<ul class="cart_list_td clearfix">
+    <ul class="cart_list_td clearfix">
         {# 提交表单时，如果checkbox没有被选中，它的值不会被提交 #}
-		<li class="col01"><input type="checkbox" name="books_ids" value="{{ book.id }}" checked></li>
-		<li class="col02"><img src="{% static book.image %}"></li>
-		<li class="col03">{{ book.name }}<br><em>{{ book.price }}元/{{ book.unit }}</em></li>
-		<li class="col04">{{ book.unite }}</li>
-		<li class="col05">{{ book.price }}</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl">+</a>
-				<input type="text" books_id="{{ book.id }}" class="num_show fl" value="{{ book.count }}">
-				<a href="javascript:;" class="minus fl">-</a>
-			</div>
-		</li>
-		<li class="col07">{{ book.amount }}元</li>
-		<li class="col08"><a href="javascript:;">删除</a></li>
-	</ul>
-	{% endfor %}
+        <li class="col01"><input type="checkbox" name="books_ids" value="{{ book.id }}" checked></li>
+        <li class="col02"><img src="{% static book.image %}"></li>
+        <li class="col03">{{ book.name }}<br><em>{{ book.price }}元/{{ book.unit }}</em></li>
+        <li class="col04">{{ book.unit }}</li>
+        <li class="col05">{{ book.price }}</li>
+        <li class="col06">
+            <div class="num_add">
+                <a href="javascript:;" class="add fl">+</a>
+                <input type="text" books_id={{ book.id }} class="num_show fl" value="{{ book.count }}">
+                <a href="javascript:;" class="minus fl">-</a>
+            </div>
+        </li>
+        <li class="col07">{{ book.amount }}元</li>
+        <li class="col08"><a href="javascript:;">删除</a></li>
+    </ul>
+    {% endfor %}
 
 
     <ul class="settlements">
         {% csrf_token %}
         <li class="col01"><input type="checkbox" name="" checked=""></li>
         <li class="col02">全选</li>
-        <li class="col03">合计(不含运费)：<span>￥</span><em>{{ total_price }}</em><br>共计<b>{{ total_count }}</b>件商品</li>
+        <li class="col03">合计(不含运费)：<span>¥</span><em>{{ total_price }}</em><br>共计<b>{{ total_count }}</b>件商品</li>
         <li class="col04"><input type="submit" value="去结算"></li>
     </ul>
     </form>

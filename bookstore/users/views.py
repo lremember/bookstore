@@ -115,7 +115,7 @@ def address(request):
 		#显示地址页面
 		#查询用户的默认地址
 		addr = Address.objects.get_default_address(passport_id=passport_id)
-		return render(request,'users/user_center_info.html',{'addr':addr,'page':'address'})
+		return render(request,'users/user_center_site.html',{'addr':addr,'page':'address'})
 	else:
 		#添加收货地址
 		#1.接收数据
@@ -125,7 +125,7 @@ def address(request):
 		recipient_phone =request.POST.get('phone')
 		#进行校验
 		if not all([recipient_name,recipient_addr,zip_code,recipient_phone]):
-			return render(request,'user/user_center_site.html',{'errmsg':'参数不能为空'})
+			return render(request,'users/user_center_site.html',{'errmsg':'参数不能为空'})
 		#添加收货地址
 		Address.objects.add_one_address(passport_id=passport_id,
 										recipient_name=recipient_name,
@@ -164,8 +164,6 @@ def order(request):
 		'page':'order'
 	}
 	return render(request,'users/user_center_order.html',context)
-
-
 
 
 

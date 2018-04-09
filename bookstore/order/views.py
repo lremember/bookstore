@@ -158,7 +158,7 @@ def order_commit(request):
 									  books_id=id,
 									  count=count,
 									  price=books.price)
-			books.asles += int(count)
+			books.sales += int(count)
 			books.stock -= int(count)
 			books.save()
 
@@ -171,6 +171,7 @@ def order_commit(request):
 		order.save()
 	except Exception as e:
 		#操作数据库出错,进行回归操作
+
 		transaction.savepoint_rollback(sid)
 		return JsonResponse({'res':7,'errmsg':'服务器错误'})
 
@@ -270,25 +271,24 @@ def check_pay(request):
 			#支付错误
 			return JsonResponse({'res':4,'errmsg':'支付出错'})
 
+@login_required
+def address(request):
+	passport_id = request.session.get('passport_id')
+	if request.method == 'GET':
+		addr = Address.objects.get_default_address(passport_id=passport_id)
+		return render(request,'users/user_center_site.html',{'addr':addr,'page':'address'})
+	else:
+		recipient_name = request.POST.get('username')
+		recipient_addr = request.POST.get('addr')
+		zip_code = request.POST.get('zip_code')
+		recipient_phone = request.POST.get('phone')
+		if not all([recipient_name,recipient_addr,zip_code,recipient_phone]):
+			return render(request,'users/user_center_site.html',{'errmsg':'参数不能为空!'})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		Address.objects.add_one_address(passport_id=passport_id,
+										recipient_name=recipient_name,
+										recipient_addr=recipient_addr,
+										zip_code=zip_code,
+										recipient_phone=recipient_phone)
+		return redirect(reverse('user:address'))
 

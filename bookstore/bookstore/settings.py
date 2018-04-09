@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     #添加富文本编辑器应用,第三方的app,所以不用再创建app
     'tinymce',
     'order',
+    'comments'
 )
 
 MIDDLEWARE_CLASSES = (
