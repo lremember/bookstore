@@ -13,14 +13,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Passport',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
-                ('is_delete', models.BooleanField(default=False, verbose_name='删除标记')),
-                ('create_time', models.DateTimeField(auto_now_add=True, verbose_name='创建时间')),
+                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('is_delete', models.BooleanField(verbose_name='删除标记', default=False)),
+                ('create_time', models.DateTimeField(verbose_name='创建时间', auto_now_add=True)),
                 ('update_time', models.DateTimeField(auto_now=True, verbose_name='更新时间')),
-                ('username', models.CharField(max_length=20, verbose_name='用户名称')),
+                ('username', models.CharField(max_length=20, verbose_name='用户名')),
                 ('password', models.CharField(max_length=40, verbose_name='用户密码')),
                 ('email', models.EmailField(max_length=254, verbose_name='用户邮箱')),
-                ('is_active', models.BooleanField(default=False, verbose_name='激活状态')),
+                ('is_active', models.BooleanField(verbose_name='激活状态', default=False)),
             ],
             options={
                 'db_table': 's_user_account',

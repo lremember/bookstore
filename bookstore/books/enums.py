@@ -6,18 +6,16 @@ OPERATINGSYSTEM = 5
 DATABASE = 6
 
 BOOKS_TYPE = {
-    PYTHON: 'Python',
-    JAVASCRIPT: 'Javascript',
-    ALGORITHMS: '数据结构与算法',
-    MACHINELEARNING: '机器学习',
-    OPERATINGSYSTEM: '操作系统',
-    DATABASE: '数据库',
+	PYTHON:'Python',
+	JAVASCRIPT:'Javascript',
+	MACHINELEARNING:'数据结构与算法',
+	OPERATINGSYSTEM:'机器学习',
+	DATABASE:'数据库',
 }
 
 OFFLINE = 0
 ONLINE = 1
-
 STATUS_CHOICE = {
-    OFFLINE: '下线',
-    ONLINE: '上线'
+	OFFLINE:'下线',
+	ONLINE:'上线',
 }

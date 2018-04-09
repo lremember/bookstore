@@ -14,16 +14,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Address',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(auto_created=True, serialize=False, verbose_name='ID', primary_key=True)),
                 ('is_delete', models.BooleanField(default=False, verbose_name='删除标记')),
                 ('create_time', models.DateTimeField(auto_now_add=True, verbose_name='创建时间')),
-                ('update_time', models.DateTimeField(verbose_name='更新时间', auto_now=True)),
+                ('update_time', models.DateTimeField(auto_now=True, verbose_name='更新时间')),
                 ('recipient_name', models.CharField(max_length=20, verbose_name='收件人')),
                 ('recipient_addr', models.CharField(max_length=256, verbose_name='收件地址')),
                 ('zip_code', models.CharField(max_length=6, verbose_name='邮政编码')),
                 ('recipient_phone', models.CharField(max_length=11, verbose_name='联系电话')),
                 ('is_default', models.BooleanField(default=False, verbose_name='是否默认')),
-                ('passport', models.ForeignKey(to='users.Passport', verbose_name='账户')),
+                ('passport', models.ForeignKey(verbose_name='账户', to='users.Passport')),
             ],
             options={
                 'db_table': 's_user_address',
