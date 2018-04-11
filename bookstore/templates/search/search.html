@@ -24,7 +24,7 @@
             </ul>
             <div class="pagenation">
                 {% if page.has_previous %}
-                    <a href="/search/?q={{ query }}&page={{ page.previous_page_number }}"><上一页</a>
+                    <a href="/search/?q={{ query }}&page={{ page.previous_page_number }}">上一页</a>
                 {% endif %}
                 {% for pindex in paginator.page_range %}
                     {% if pindex == page.number %}

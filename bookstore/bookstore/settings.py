@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'order',
     'comments',
     'haystack',
+    'users.templatetags.filters',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -153,8 +154,8 @@ EMAIL_FROM = 'shangguigu<18732224534@163.com>'
 HAYSTACK_CONNECTIONS = {
     'default': {
 
-        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
-
+        # 'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     }
 }

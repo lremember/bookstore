@@ -49,17 +49,19 @@
 {% endblock header_con %}
 {# 网页顶部搜索框块 #}
 {% block search_bar %}
-    <div class="search_bar clearfix">
-        <a href="{% url 'books:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
-        <div class="search_con fl">
-            <input type="text" class="input_text fl" name="" placeholder="搜索商品">
-            <input type="button" class="input_btn fr" name="" value="搜索">
-        </div>
-        <div class="guest_cart fr">
-            <a href="{% url 'cart:show' %}" class="cart_name fl">我的购物车</a>
-            <div class="book_count fl" id="show_count">0</div>
-        </div>
-    </div>
+   	<div class="search_bar clearfix">
+		<a href="{% url 'books:index' %}" class="logo fl"><img src="{% static 'images/logo.png' %}" style="width: 160px; height: 53px;"></a>
+		<div class="search_con fl">
+            <form method="get" action="/search/" target="_blank">
+                <input type="text" class="input_text fl" name="q" placeholder="搜索商品">
+                <input type="submit" class="input_btn fr" name="" value="搜索">
+            </form>
+		</div>
+		<div class="guest_cart fr">
+			<a href="{% url 'cart:show' %}" class="cart_name fl">我的购物车</a>
+			<div class="book_count fl" id="show_count">0</div>
+		</div>
+	</div>
 {% endblock search_bar %}
 {# 网页主体内容块 #}
 {% block body %}{% endblock body %}

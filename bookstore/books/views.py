@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django_redis import get_redis_connection
+
 from books.models import Books,BooksManager
 from books.enums import *
 from django.core.urlresolvers import reverse
@@ -52,11 +54,16 @@ def detail(request,books_id):
 
 	#新品推荐
 	books_li = Books.objects.get_books_by_type(type_id=books.type_id,limit=2,sort='new')
-
-	#定义上下文
+	if request.session.has_key('islogin'):
+		# 用户已登录，记录浏览记录
+		con = get_redis_connection('default')
+		key = 'history_%d' % request.session.get('passport_id')
+		# 先从redis列表中移除books.id
+		con.lrem(key, 0, books.id)
+		con.lpush(key, books.id)
+		# 保存用户最近浏览的5个商品
+		con.ltrim(key, 0, 4)
 	context = {'books':books,'book_li':books_li}
-
-	#使用模板
 	return render(request,'books/detail.html',context)
 
 def list(request,type_id,page):

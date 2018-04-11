@@ -3,6 +3,9 @@ from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from django_redis import get_redis_connection
+
+from books.models import Books
 from bookstore import settings
 from order.models import OrderInfo, OrderGoods
 from .models import Passport, Address
@@ -114,9 +117,13 @@ def user(request):
 	'''用户中心-信息页'''
 	passport_id = request.session.get('passport_id')
 	addr = Address.objects.get_default_address(passport_id=passport_id)
-
+	con = get_redis_connection('default')
+	key = 'history_%d' % passport_id
+	history_li = con.lrange(key, 0, 4)
 	books_li = []
-
+	for id in history_li:
+		books = Books.objects.get_books_by_id(books_id=id)
+		books_li.append(books)
 	context = {
 		'addr':addr,
 		'page':'user',
@@ -214,6 +221,16 @@ def verifycode(request):
 	im.save(buf,'png')
 	return HttpResponse(buf.getvalue(),'image/png')
 
-
+def register_active(request, token):
+	serializer = Serializer(settings.SECRET_KEY, 3600)
+	try:
+		info = serializer.loads(token)
+		passport_id = info['confirm']
+		passport = Passport.objects.get(id=passport_id)
+		passport.is_active = True
+		passport.save()
+		return redirect(reverse('user:login'))
+	except SignatureExpired:
+		return HttpResponse('激活链接已过期')
 
 
