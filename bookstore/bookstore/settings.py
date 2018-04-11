@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     #添加富文本编辑器应用,第三方的app,所以不用再创建app
     'tinymce',
     'order',
-    'comments'
+    'comments',
+    'haystack',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -138,3 +139,27 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 SESSION_CACHE_ALIAS = 'default'
 
 ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do'
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '18732224534@163.com'
+EMAIL_HOST_PASSWORD = 'liutianxing1994'
+EMAIL_FROM = 'shangguigu<18732224534@163.com>'
+
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6

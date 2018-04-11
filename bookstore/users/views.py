@@ -1,16 +1,18 @@
+from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render,redirect
-
+from django.http import HttpResponse
+from bookstore import settings
 from order.models import OrderInfo, OrderGoods
 from .models import Passport, Address
 import re
 from utils.decorators import login_required
-
-
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import SignatureExpired
 # Create your views here.
 from users.models import Passport
-
+from users.tasks import send_active_email
 
 def register(request):
 	'''显示用户注册页面'''
@@ -30,9 +32,21 @@ def register_handle(request):
 	if not re.match(r'^[a-z0-9][\w\.\-]*@[a-z0-9]+(\.[a-z]{2,5}){1,2}$',email):
 		return render(request,'users/register.html',{'errmg':'邮箱不合法!'})
 	#惊醒业务处理:注册,向账户系统添加账户
-	Passport.objects.add_one_passport(username=username,password=password,email=email)
-	# passport = Passport.objects.add_one_passport(username=username,password=password,email=email)
+	p = Passport.objects.check_passport(username=username)
+	if p:
+		return render(request,'users/register.html',{'errmsg':'用户名已存在'})
+	passport = Passport.objects.add_one_passport(username=username, password=password, email=email)
+
+	# 生成激活的token itsdangerous
+	print("000000000000000000000000")
+	serializer = Serializer(settings.SECRET_KEY, 3600)
+	token = serializer.dumps({'confirm': passport.id})  # 返回bytes
+	token = token.decode()
+	send_mail('尚硅谷书城用户激活','',settings.EMAIL_FROM,[email],html_message='<a href="http://127.0.0.1:8000/user/active/%s/">http://127.0.0.1:8000/user/active/</a>' % token)
+	send_active_email.delay(token, username, email)
+	print('1111111111111111111111111')
 	return redirect(reverse('books:index'))
+
 
 def login(request):
 	'''显示登录界面'''
@@ -50,13 +64,18 @@ def login_check(request):
 	username = request.POST.get('username')
 	password = request.POST.get('password')
 	remember = request.POST.get('remember')
+	verifycode =request.POST.get('verifycode')
+
 
 	#数据校验
-	if not all([username,password,remember]):
+	if not all([username,password,remember,verifycode]):
 		#有数据为空
 		return JsonResponse({'res':2})
 
 	#进行处理:根据用户名和密码查询账户信息
+	if verifycode.upper() != request.session['verifycode']:
+		return JsonResponse({'res': 2})
+
 	passport = Passport.objects.get_one_passport(username=username,password=password)
 
 	if passport:
@@ -166,24 +185,34 @@ def order(request):
 	return render(request,'users/user_center_order.html',context)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def verifycode(request):
+	from PIL import Image,ImageDraw,ImageFont
+	import random
+	bgcolor = (random.randrange(20,120),random.randrange(20,100),255)
+	width = 100
+	height =25
+	im = Image.new('RGB',(width,height),bgcolor)
+	draw = ImageDraw.Draw(im)
+	for i in range(0,100):
+		xy=(random.randrange(0,width),random.randrange(0,height))
+		fill = (random.randrange(0,255),255,random.randrange(0,255))
+		draw.point(xy,fill=fill)
+	str1 = 'ABCD123EFGHIJK456LMNOPQRS789TUVWXYZ0'
+	rand_str = ''
+	for i in range(0,4):
+		rand_str += str1[random.randrange(0,len(str1))]
+	font = ImageFont.truetype("/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-R.ttf",15)
+	fontcolor = (255,random.randrange(0,255),random.randrange(0,255))
+	draw.text((5,2),rand_str[0],font=font,fill=fontcolor)
+	draw.text((25,2),rand_str[1],font=font,fill=fontcolor)
+	draw.text((50,2),rand_str[2],font=font,fill=fontcolor)
+	draw.text((75,2),rand_str[3],font=font,fill=fontcolor)
+	del draw
+	request.session['verifycode'] = rand_str
+	import io
+	buf =io.BytesIO()
+	im.save(buf,'png')
+	return HttpResponse(buf.getvalue(),'image/png')
 
 
 

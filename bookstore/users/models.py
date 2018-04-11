@@ -21,6 +21,17 @@ class PassportManager(models.Manager):
 			passport = None
 		return passport
 
+	def check_passport(self,username):
+		try:
+			passport = self.get(username=username)
+		except self.model.DoesNotExist:
+			passport = None
+		if passport:
+			return True
+		return False
+	
+
+
 
 class Passport(BaseModel):
 	username = models.CharField(max_length=20, verbose_name='用户名')
@@ -32,6 +43,8 @@ class Passport(BaseModel):
 
 	class Meta:
 		db_table = 's_user_account'
+
+
 
 
 class AddressManager(models.Manager):

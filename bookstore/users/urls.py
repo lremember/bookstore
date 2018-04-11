@@ -12,5 +12,6 @@ urlpatterns = [
 	url(r'^address/$', views.address, name='address'),  # 用户中心-地址页
 	url(r'^order/$', views.order, name='order'),  # 用户中心-订单页面
 	url(r'^$',views.user,name='user'),
+	url(r'^verifycode/$', views.verifycode, name='verifycode'),  # 验证码功能
 
 ]

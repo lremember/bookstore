@@ -171,6 +171,7 @@ def order_commit(request):
 		order.save()
 	except Exception as e:
 		#操作数据库出错,进行回归操作
+		print('e: ', e)
 
 		transaction.savepoint_rollback(sid)
 		return JsonResponse({'res':7,'errmsg':'服务器错误'})
