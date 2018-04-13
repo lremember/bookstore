@@ -145,10 +145,12 @@ ALIPAY_URL = 'https://openapi.alipaydev.com/gateway.do'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.163.com'
-EMAIL_PORT = 25
+EMAIL_PORT = 465
 EMAIL_HOST_USER = '18732224534@163.com'
 EMAIL_HOST_PASSWORD = 'liutianxing1994'
 EMAIL_FROM = 'shangguigu<18732224534@163.com>'
+EMAIL_USE_SSL = True
+
 
 
 HAYSTACK_CONNECTIONS = {
@@ -164,3 +166,6 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6
+
+
+
